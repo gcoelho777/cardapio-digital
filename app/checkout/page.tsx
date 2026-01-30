@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "../providers/cart-provider";
-import { buildWhatsAppMessage } from "../utils/whatsapp";
+import { buildWhatsAppUrl } from "../utils/whatsapp";
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat("pt-BR", {
@@ -31,10 +31,13 @@ export default function CheckoutPage() {
   const total =
     subtotal + (typeof deliveryFee === "number" ? deliveryFee : 0);
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
-  const whatsappMessage = useMemo(
+  const whatsappNumber =
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "93991306374";
+  const whatsappUrl = useMemo(
     () =>
-      buildWhatsAppMessage({
+      buildWhatsAppUrl({
+        phoneNumber: whatsappNumber,
+        orderDraft: {
         id: "draft",
         items,
         subtotal,
@@ -47,6 +50,7 @@ export default function CheckoutPage() {
         deliveryType,
         scheduledAt: scheduledAt || undefined,
         createdAt: new Date().toISOString(),
+        },
       }),
     [
       items,
@@ -59,14 +63,9 @@ export default function CheckoutPage() {
       subtotal,
       deliveryFee,
       total,
+      whatsappNumber,
     ]
   );
-
-  const whatsappUrl = whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-        whatsappMessage
-      )}`
-    : "";
 
   if (items.length === 0) {
     return (
@@ -245,25 +244,10 @@ export default function CheckoutPage() {
           href={whatsappUrl}
           target="_blank"
           rel="noreferrer"
-          className={`mt-4 flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition ${
-            whatsappNumber
-              ? "bg-emerald-600 text-white hover:bg-emerald-500"
-              : "cursor-not-allowed bg-slate-200 text-slate-500"
-          }`}
-          aria-disabled={!whatsappNumber}
-          onClick={(event) => {
-            if (!whatsappNumber) {
-              event.preventDefault();
-            }
-          }}
+          className="mt-4 flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
         >
           Enviar pedido no WhatsApp
         </a>
-        {!whatsappNumber ? (
-          <p className="mt-3 text-xs text-slate-500">
-            Configure `NEXT_PUBLIC_WHATSAPP_NUMBER` para ativar o envio.
-          </p>
-        ) : null}
       </aside>
     </div>
   );

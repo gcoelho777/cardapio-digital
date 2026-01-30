@@ -56,3 +56,12 @@ export const buildWhatsAppMessage = (orderDraft: OrderDraft) => {
 
   return lines.join("\n");
 };
+
+export const buildWhatsAppUrl = (params: {
+  phoneNumber: string;
+  orderDraft: OrderDraft;
+}) => {
+  const { phoneNumber, orderDraft } = params;
+  const message = buildWhatsAppMessage(orderDraft);
+  return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+};

@@ -141,12 +141,12 @@ export default function CartPage() {
             <span>{formatPrice(totalPrice)}</span>
           </div>
         </div>
-        <button
-          type="button"
-          className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+        <Link
+          href="/checkout"
+          className="mt-4 flex w-full items-center justify-center rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
           Finalizar pedido
-        </button>
+        </Link>
       </aside>
     </div>
   );
