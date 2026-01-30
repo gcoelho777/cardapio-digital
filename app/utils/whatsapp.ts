@@ -6,6 +6,17 @@ const formatPrice = (value: number) =>
     currency: "BRL",
   }).format(value);
 
+const formatSchedule = (value: string) => {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(parsed);
+};
+
 export const buildWhatsAppMessage = (orderDraft: OrderDraft) => {
   const {
     items,
@@ -30,7 +41,7 @@ export const buildWhatsAppMessage = (orderDraft: OrderDraft) => {
     lines.push(`Endereço: ${customerAddress}`);
   }
   if (scheduledAt) {
-    lines.push(`Agendamento: ${scheduledAt}`);
+    lines.push(`Agendamento: ${formatSchedule(scheduledAt)}`);
   }
   if (notes) {
     lines.push(`Observações: ${notes}`);
