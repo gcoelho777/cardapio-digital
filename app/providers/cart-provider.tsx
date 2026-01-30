@@ -12,6 +12,7 @@ import type { CartItem } from "../types/cart-item";
 
 type CartState = {
   items: CartItem[];
+  lastAddedAt: number | null;
 };
 
 type CartAction =
@@ -25,6 +26,7 @@ type CartContextValue = {
   items: CartItem[];
   totalItems: number;
   totalPrice: number;
+  lastAddedAt: number | null;
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
@@ -35,6 +37,7 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 const initialState: CartState = {
   items: [],
+  lastAddedAt: null,
 };
 
 const STORAGE_KEY = "cart_items_v1";
@@ -53,14 +56,16 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
               ? { ...item, quantity: item.quantity + action.payload.quantity }
               : item
           ),
+          lastAddedAt: Date.now(),
         };
       }
 
-      return { items: [...state.items, action.payload] };
+      return { items: [...state.items, action.payload], lastAddedAt: Date.now() };
     }
     case "REMOVE_ITEM":
       return {
         items: state.items.filter((item) => item.id !== action.payload.id),
+        lastAddedAt: state.lastAddedAt,
       };
     case "UPDATE_QUANTITY":
       return {
@@ -69,9 +74,10 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
             ? { ...item, quantity: action.payload.quantity }
             : item
         ),
+        lastAddedAt: state.lastAddedAt,
       };
     case "CLEAR_CART":
-      return { items: [] };
+      return { items: [], lastAddedAt: state.lastAddedAt };
     default:
       return state;
   }
@@ -130,6 +136,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items: state.items,
       totalItems,
       totalPrice,
+      lastAddedAt: state.lastAddedAt,
       addItem: (item) => dispatch({ type: "ADD_ITEM", payload: item }),
       removeItem: (id) => dispatch({ type: "REMOVE_ITEM", payload: { id } }),
       updateQuantity: (id, quantity) =>

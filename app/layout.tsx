@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import CartFab from "./components/cart-fab";
 import CartLink from "./components/cart-link";
 import { CartProvider } from "./providers/cart-provider";
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             </div>
           </header>
           <main>{children}</main>
+          <CartFab />
         </CartProvider>
       </body>
     </html>

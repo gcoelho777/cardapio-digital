@@ -33,3 +33,20 @@ main {
 .border-brand {
   border-color: #4a6128;
 }
+
+@keyframes cart-bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  70% {
+    transform: scale(0.98);
+  }
+}
+
+.cart-bounce {
+  animation: cart-bounce 600ms ease;
+}
