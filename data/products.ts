@@ -5,6 +5,7 @@ export const products = {
       restricoes: ["zero lactose"],
       descricao:
         "Para os amantes de chocolate, nossa torta recordista em vendas para deixar seu Natal ainda mais feliz.",
+      imageUrl: "/images/mock-chocolate-cake.jpg",
       antecedencia_dias: 2,
       opcoes: [
         { preco: 220, peso_kg: 1.3 },
@@ -15,6 +16,7 @@ export const products = {
       nome: "Banoffe",
       descricao:
         "Biscoitos artesanais com doce de leite caseiro, bananas e chantilly.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       pronta_entrega: true,
       opcoes: [
         { preco: 220, peso_kg: 1.3 },
@@ -28,6 +30,7 @@ export const products = {
       restricoes: ["zero leite"],
       descricao:
         "Massa pão de ló com geleia de frutas amarelas (pêssego, maracujá e manga) e creme leve e fresco.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       antecedencia_horas: 12,
       opcoes: [
         { preco: 250, volume_l: 1.4 },
@@ -39,6 +42,7 @@ export const products = {
       restricoes: ["zero leite"],
       descricao:
         "Bolo de chocolate, geleia de frutas vermelhas e mousse de chocolate.",
+      imageUrl: "/images/mock-chocolate-cake.jpg",
       antecedencia_horas: 12,
       opcoes: [
         { preco: 280, volume_l: 1.4 },
@@ -50,6 +54,7 @@ export const products = {
       restricoes: ["zero lactose"],
       descricao:
         "Mousse de cupuaçu, pão de ló, brigadeiro de cupuaçu e farofinha de castanhas.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       antecedencia_dias: 1,
       opcoes: [
         { preco: 250, volume_l: 1.4 },
@@ -61,6 +66,7 @@ export const products = {
       restricoes: ["zero leite"],
       descricao:
         "Pão de ló com doce de abacaxi com coco e creme baba de moça.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       pronta_entrega: true,
       opcoes: [
         { preco: 220, volume_l: 1.4 },
@@ -71,6 +77,7 @@ export const products = {
       nome: "Taça Ninho Cremoso",
       descricao:
         "Pão de ló com creme de ninho, geleia de frutas vermelhas e brigadeiro branco.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       antecedencia_dias: 2,
       opcoes: [
         { preco: 220, volume_l: 1.4 },
@@ -82,6 +89,7 @@ export const products = {
       restricoes: ["zero lactose"],
       descricao:
         "Mousse de maracujá, pão de ló, frutas (manga, kiwi e uvas) e geleia de maracujá.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       antecedencia_horas: 6,
       opcoes: [{ preco: 200, volume_l: 1.4 }],
     },
@@ -92,6 +100,7 @@ export const products = {
       restricoes: ["zero lactose"],
       preco: 200,
       aro: 24,
+      imageUrl: "/images/mock-quiche.jpg",
       pronta_entrega: true,
     },
     {
@@ -99,6 +108,7 @@ export const products = {
       restricoes: ["zero lactose"],
       preco: 250,
       aro: 24,
+      imageUrl: "/images/mock-quiche.jpg",
       antecedencia_dias: 1,
     },
     {
@@ -106,6 +116,7 @@ export const products = {
       restricoes: ["zero leite"],
       preco: 200,
       aro: 20,
+      imageUrl: "/images/mock-quiche.jpg",
       antecedencia_horas: 8,
     },
   ],
@@ -115,6 +126,7 @@ export const products = {
       restricoes: ["zero lactose"],
       preco: 35,
       sabores: ["chocolate", "cenoura"],
+      imageUrl: "/images/mock-carrot-cake.jpg",
       pronta_entrega: true,
     },
     {
@@ -123,6 +135,7 @@ export const products = {
       preco: 45,
       sabores: ["chocolate", "cenoura"],
       observacoes: ["Leva cobertura de brigadeiro"],
+      imageUrl: "/images/mock-chocolate-cake.jpg",
       antecedencia_horas: 10,
     },
     {
@@ -134,6 +147,7 @@ export const products = {
         "Leva cobertura",
         "Informar no ato do pedido se é zero leite ou zero lactose",
       ],
+      imageUrl: "/images/mock-carrot-cake.jpg",
       antecedencia_dias: 2,
     },
   ],
@@ -144,6 +158,7 @@ export const products = {
       preco: 90,
       peso_g: 750,
       descricao: "Massa red velvet com cobertura de brigadeiro de ninho.",
+      imageUrl: "/images/mock-chocolate-cake.jpg",
       antecedencia_dias: 3,
     },
     {
@@ -151,6 +166,7 @@ export const products = {
       preco: 85,
       peso_g: 750,
       descricao: "Bolo de chocolate com muito brigadeiro e nibs de cacau.",
+      imageUrl: "/images/mock-chocolate-cake.jpg",
       antecedencia_dias: 2,
     },
     {
@@ -158,12 +174,14 @@ export const products = {
       preco: 90,
       peso_g: 750,
       descricao: "Massa de cenoura com muito brigadeiro.",
+      imageUrl: "/images/mock-carrot-cake.jpg",
       antecedencia_dias: 2,
     },
     {
       nome: "Bolo Laranja Natalino",
       preco: 55,
       descricao: "Massa de laranja decorada com frutas cristalizadas e frutas secas.",
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       pronta_entrega: true,
     },
     {
@@ -172,6 +190,7 @@ export const products = {
       peso_g: 750,
       descricao: "Bolo de ameixa com cobertura de brigadeiro de coco.",
       observacoes: ["Zero glúten", "Cobertura tradicional"],
+      imageUrl: "/images/mock-fruit-dessert.jpg",
       antecedencia_dias: 2,
     },
     {
@@ -179,12 +198,14 @@ export const products = {
       preco: 50,
       peso_g: 600,
       descricao: "Massa vermelha estilo red velvet, sem cobertura.",
+      imageUrl: "/images/mock-carrot-cake.jpg",
       antecedencia_horas: 12,
     },
     {
       nome: "Bolo de Laranja Tradicional",
       preco: 45,
       descricao: "Bolo mais vendido, ideal para o café.",
+      imageUrl: "/images/mock-carrot-cake.jpg",
       pronta_entrega: true,
     },
   ],

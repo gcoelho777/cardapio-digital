@@ -94,7 +94,7 @@ export default function ProductPage({
       <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
         <div className="relative h-56 w-full bg-slate-100">
           <Image
-            src="/images/placeholder.svg"
+            src={item.imageUrl ?? "/images/placeholder.svg"}
             alt={`Foto do produto ${item.nome}`}
             fill
             className="object-cover"
@@ -181,7 +181,7 @@ export default function ProductPage({
           <ProductPurchase
             productId={productId}
             name={item.nome}
-            imageUrl="/images/placeholder.svg"
+            imageUrl={item.imageUrl ?? "/images/placeholder.svg"}
             basePrice={basePrice}
             options={item.opcoes}
           />

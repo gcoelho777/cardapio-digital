@@ -91,7 +91,7 @@ export default function Home() {
                     >
                       <div className="relative h-36 w-full bg-slate-100">
                         <Image
-                          src="/images/placeholder.svg"
+                          src={item.imageUrl ?? "/images/placeholder.svg"}
                           alt={`Foto do produto ${item.nome}`}
                           fill
                           className="object-cover"
@@ -144,7 +144,7 @@ export default function Home() {
                             productId={productId}
                             name={item.nome}
                             price={basePrice}
-                            imageUrl="/images/placeholder.svg"
+                            imageUrl={item.imageUrl ?? "/images/placeholder.svg"}
                           />
                         )}
                       </div>
