@@ -135,7 +135,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <div className="grid gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_360px] lg:pb-0">
       <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <header className="space-y-2">
           <h1 className="text-2xl font-semibold text-slate-900">Checkout</h1>
@@ -155,7 +155,7 @@ export default function CheckoutPage() {
               onBlur={() =>
                 setTouched((prev) => ({ ...prev, customerName: true }))
               }
-              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+              className={`h-11 rounded-xl border px-4 text-base focus:outline-none ${
                 touched.customerName && !nameIsValid
                   ? "border-rose-300 text-rose-600 focus:border-rose-400"
                   : "border-slate-200 text-slate-700 focus:border-slate-400"
@@ -179,7 +179,7 @@ export default function CheckoutPage() {
               onBlur={() =>
                 setTouched((prev) => ({ ...prev, customerPhone: true }))
               }
-              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+              className={`h-11 rounded-xl border px-4 text-base focus:outline-none ${
                 touched.customerPhone && !phoneIsValid
                   ? "border-rose-300 text-rose-600 focus:border-rose-400"
                   : "border-slate-200 text-slate-700 focus:border-slate-400"
@@ -228,25 +228,25 @@ export default function CheckoutPage() {
               <label className="text-sm font-semibold text-slate-700">
                 Endereço
               </label>
-            <input
-              value={customerAddress}
-              onChange={(event) => setCustomerAddress(event.target.value)}
-              onBlur={() =>
-                setTouched((prev) => ({ ...prev, customerAddress: true }))
-              }
-              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
-                touched.customerAddress && !addressIsValid
-                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
-                  : "border-slate-200 text-slate-700 focus:border-slate-400"
-              }`}
-              placeholder="Rua, número, bairro"
-            />
-            {touched.customerAddress && !addressIsValid ? (
-              <p className="text-xs text-rose-500">
-                Informe o endereço completo.
-              </p>
-            ) : null}
-          </div>
+              <input
+                value={customerAddress}
+                onChange={(event) => setCustomerAddress(event.target.value)}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, customerAddress: true }))
+                }
+                className={`h-11 rounded-xl border px-4 text-base focus:outline-none ${
+                  touched.customerAddress && !addressIsValid
+                    ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                    : "border-slate-200 text-slate-700 focus:border-slate-400"
+                }`}
+                placeholder="Rua, número, bairro"
+              />
+              {touched.customerAddress && !addressIsValid ? (
+                <p className="text-xs text-rose-500">
+                  Informe o endereço completo.
+                </p>
+              ) : null}
+            </div>
           ) : null}
 
           <div className="grid gap-2">
@@ -260,8 +260,8 @@ export default function CheckoutPage() {
               onBlur={() =>
                 setTouched((prev) => ({ ...prev, scheduledAt: true }))
               }
-              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
-                touched.scheduledAt && !scheduledAtIsValid
+              className={`h-11 rounded-xl border px-4 text-base focus:outline-none ${
+                touched.scheduledAt && !schedulingRulesValid
                   ? "border-rose-300 text-rose-600 focus:border-rose-400"
                   : "border-slate-200 text-slate-700 focus:border-slate-400"
               }`}
@@ -281,14 +281,14 @@ export default function CheckoutPage() {
             <textarea
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
-              className="min-h-[100px] rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+              className="min-h-[100px] rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-700 focus:border-slate-400 focus:outline-none"
               placeholder="Ex: sem açúcar, ponto do bolo, etc."
             />
           </div>
         </div>
       </section>
 
-      <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-6">
         <h2 className="text-lg font-semibold text-slate-900">
           Resumo do pedido
         </h2>
@@ -330,7 +330,7 @@ export default function CheckoutPage() {
               inputMode="decimal"
               value={deliveryFeeInput}
               onChange={(event) => setDeliveryFeeInput(event.target.value)}
-              className={`h-10 rounded-xl border px-3 text-sm focus:outline-none ${
+              className={`h-10 rounded-xl border px-3 text-base focus:outline-none ${
                 !deliveryFeeIsValid
                   ? "border-rose-300 text-rose-600 focus:border-rose-400"
                   : "border-slate-200 text-slate-700 focus:border-slate-400"
@@ -379,6 +379,39 @@ export default function CheckoutPage() {
           </p>
         ) : null}
       </aside>
+      <div className="fixed inset-x-4 bottom-4 z-20 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between text-sm text-slate-600">
+          <span>Total</span>
+          <span className="text-base font-semibold text-slate-900">
+            {formatPrice(total)}
+          </span>
+        </div>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+          className={`mt-3 flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition ${
+            formIsValid
+              ? "bg-emerald-600 text-white hover:bg-emerald-500"
+              : "cursor-not-allowed bg-slate-200 text-slate-500"
+          }`}
+          aria-disabled={!formIsValid}
+          onClick={(event) => {
+            if (!formIsValid) {
+              event.preventDefault();
+              setTouched((prev) => ({
+                ...prev,
+                customerName: true,
+                customerPhone: true,
+                customerAddress: deliveryType === "entrega",
+                scheduledAt: true,
+              }));
+            }
+          }}
+        >
+          Enviar no WhatsApp
+        </a>
+      </div>
     </div>
   );
 }

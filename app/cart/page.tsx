@@ -27,7 +27,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid gap-6 pb-28 lg:grid-cols-[minmax(0,1fr)_320px] lg:pb-0">
       <section className="space-y-4">
         <header className="flex items-center justify-between">
           <div>
@@ -117,7 +117,7 @@ export default function CartPage() {
         </div>
       </section>
 
-      <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-6">
         <h2 className="text-lg font-semibold text-slate-900">Resumo</h2>
         <div className="mt-4 space-y-3 text-sm text-slate-600">
           <div className="flex items-center justify-between">
@@ -143,6 +143,20 @@ export default function CartPage() {
           Finalizar pedido
         </Link>
       </aside>
+      <div className="fixed inset-x-4 bottom-4 z-20 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between text-sm text-slate-600">
+          <span>Total</span>
+          <span className="text-base font-semibold text-slate-900">
+            {formatPrice(totalPrice)}
+          </span>
+        </div>
+        <Link
+          href="/checkout"
+          className="mt-3 flex w-full items-center justify-center rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+        >
+          Finalizar pedido
+        </Link>
+      </div>
     </div>
   );
 }
