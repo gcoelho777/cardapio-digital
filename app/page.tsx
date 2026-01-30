@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
       {!hasProducts ? (
-        <section className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center shadow-sm">
+        <section className="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-10 text-center shadow-sm">
           <p className="text-sm font-semibold text-slate-500">
             Nenhum produto disponível
           </p>
@@ -76,7 +76,7 @@ export default function Home() {
               {category.replaceAll("_", " ")}
             </h2>
             {items.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
+              <div className="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6 text-sm text-slate-500">
                 Nenhum item disponível nesta categoria.
               </div>
             ) : (
@@ -87,7 +87,7 @@ export default function Home() {
                   return (
                     <article
                       key={item.nome}
-                      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+                      className="overflow-hidden rounded-2xl border border-slate-200 bg-white/80 shadow-sm"
                     >
                       <div className="relative h-36 w-full bg-slate-100">
                         <Image
@@ -99,31 +99,43 @@ export default function Home() {
                         />
                       </div>
                       <div className="space-y-4 p-5">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Link
-                                href={`/produto/${productId}`}
-                                className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
-                              >
-                                {item.nome}
-                              </Link>
-                              {item.opcoes && item.opcoes.length > 1 ? (
-                                <span className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                                  {item.opcoes.length} tamanhos
-                                </span>
-                              ) : null}
-                            </div>
-                            {item.descricao && (
-                              <p className="mt-1 text-sm text-slate-600">
-                                {item.descricao}
-                              </p>
-                            )}
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Link
+                              href={`/produto/${productId}`}
+                              className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
+                            >
+                              {item.nome}
+                            </Link>
+                            {item.opcoes && item.opcoes.length > 1 ? (
+                              <span className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                                {item.opcoes.length} tamanhos
+                              </span>
+                            ) : null}
                           </div>
-                          <span className="text-sm font-semibold text-slate-900">
-                            {getProductPrice(item)}
-                          </span>
+                          {item.descricao && (
+                            <p className="mt-1 text-sm text-slate-600">
+                              {item.descricao}
+                            </p>
+                          )}
+                          {item.restricoes && item.restricoes.length > 0 ? (
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {item.restricoes.map((restricao) => (
+                                <span
+                                  key={restricao}
+                                  className="rounded-full border border-brand bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-brand"
+                                >
+                                  {restricao}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
                         </div>
+                        <span className="text-sm font-semibold text-slate-900">
+                          {getProductPrice(item)}
+                        </span>
+                      </div>
                         {item.opcoes && item.opcoes.length > 0 ? (
                           <Link
                             href={`/produto/${productId}`}
