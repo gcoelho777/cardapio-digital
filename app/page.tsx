@@ -1,23 +1,33 @@
-const menuItems = [
-  {
-    id: 1,
-    name: "Hambúrguer artesanal",
-    description: "Pão brioche, blend da casa, queijo e molho especial.",
-    price: "R$ 32,00",
-  },
-  {
-    id: 2,
-    name: "Salada verde",
-    description: "Folhas frescas, tomate cereja e vinagrete cítrico.",
-    price: "R$ 24,00",
-  },
-  {
-    id: 3,
-    name: "Limonada da casa",
-    description: "Limão tahiti, hortelã e toque de gengibre.",
-    price: "R$ 12,00",
-  },
-];
+import Image from "next/image";
+import Link from "next/link";
+import { products } from "../data/products";
+
+const formatPrice = (value: number) =>
+  new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+
+const slugify = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+const getProductPrice = (item: {
+  preco?: number;
+  opcoes?: { preco: number }[];
+}) => {
+  if (typeof item.preco === "number") {
+    return formatPrice(item.preco);
+  }
+  if (item.opcoes && item.opcoes.length > 0) {
+    return formatPrice(item.opcoes[0].preco);
+  }
+  return "Sob consulta";
+};
 
 export default function Home() {
   return (
@@ -32,37 +42,57 @@ export default function Home() {
         </p>
       </section>
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Itens em destaque</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {menuItems.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-base font-semibold text-slate-900">
-                    {item.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-slate-600">
-                    {item.description}
-                  </p>
-                </div>
-                <span className="text-sm font-semibold text-slate-900">
-                  {item.price}
-                </span>
-              </div>
-              <button
-                type="button"
-                className="mt-4 w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+      {Object.entries(products).map(([category, items]) => (
+        <section key={category} className="space-y-4">
+          <h2 className="text-lg font-semibold text-slate-900">
+            {category.replaceAll("_", " ")}
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {items.map((item) => (
+              <article
+                key={item.nome}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
               >
-                Adicionar ao carrinho
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
+                <div className="relative h-36 w-full bg-slate-100">
+                  <Image
+                    src="/images/placeholder.svg"
+                    alt={`Foto do produto ${item.nome}`}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+                <div className="space-y-4 p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <Link
+                        href={`/produto/${slugify(`${category}-${item.nome}`)}`}
+                        className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
+                      >
+                        {item.nome}
+                      </Link>
+                      {item.descricao && (
+                        <p className="mt-1 text-sm text-slate-600">
+                          {item.descricao}
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-sm font-semibold text-slate-900">
+                      {getProductPrice(item)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    Adicionar
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }
