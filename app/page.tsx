@@ -44,6 +44,21 @@ const getProductBasePrice = (item: {
   return null;
 };
 
+const getDescription = (item: unknown) =>
+  typeof item === "object" &&
+  item !== null &&
+  "descricao" in item &&
+  typeof (item as { descricao?: string }).descricao === "string"
+    ? (item as { descricao: string }).descricao
+    : null;
+
+const hasOptions = (item: unknown): item is { opcoes: { preco: number }[] } =>
+  typeof item === "object" &&
+  item !== null &&
+  "opcoes" in item &&
+  Array.isArray((item as { opcoes?: { preco: number }[] }).opcoes) &&
+  ((item as { opcoes?: { preco: number }[] }).opcoes?.length ?? 0) > 0;
+
 export default function Home() {
   const categories = Object.entries(products);
   const hasProducts = categories.some(([, items]) => items.length > 0);
@@ -108,15 +123,15 @@ export default function Home() {
                             >
                               {item.nome}
                             </Link>
-                            {item.opcoes && item.opcoes.length > 1 ? (
+                            {hasOptions(item) && item.opcoes.length > 1 ? (
                               <span className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                                 {item.opcoes.length} tamanhos
                               </span>
                             ) : null}
                           </div>
-                          {item.descricao && (
+                          {getDescription(item) && (
                             <p className="mt-1 text-sm text-slate-600">
-                              {item.descricao}
+                              {getDescription(item)}
                             </p>
                           )}
                           {item.restricoes && item.restricoes.length > 0 ? (
@@ -136,7 +151,7 @@ export default function Home() {
                           {getProductPrice(item)}
                         </span>
                       </div>
-                        {item.opcoes && item.opcoes.length > 0 ? (
+                        {hasOptions(item) ? (
                           <Link
                             href={`/produto/${productId}`}
                             className="flex w-full items-center justify-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"

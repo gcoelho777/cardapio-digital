@@ -58,11 +58,13 @@ export async function generateMetadata({
   }
 
   const { item } = result;
+  const description =
+    typeof item.descricao === "string" && item.descricao.length > 0
+      ? item.descricao
+      : "Veja detalhes do produto e escolha a melhor opção para o seu pedido.";
   return {
     title: `${item.nome} | Cardápio Digital`,
-    description:
-      item.descricao ??
-      "Veja detalhes do produto e escolha a melhor opção para o seu pedido.",
+    description,
   };
 }
 

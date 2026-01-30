@@ -36,7 +36,9 @@ export default function CheckoutPage() {
   const phoneIsValid = phoneDigits.length === 10 || phoneDigits.length === 11;
   const deliveryFeeIsValid =
     deliveryFeeInput.trim() === "" ||
-    (Number.isFinite(deliveryFee) && deliveryFee >= 0);
+    (typeof deliveryFee === "number" &&
+      Number.isFinite(deliveryFee) &&
+      deliveryFee >= 0);
   const scheduledAtIsValid =
     scheduledAt !== "" && !Number.isNaN(Date.parse(scheduledAt));
   const scheduledDate = scheduledAtIsValid ? new Date(scheduledAt) : null;

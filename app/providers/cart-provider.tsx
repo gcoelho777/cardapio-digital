@@ -45,7 +45,7 @@ const STORAGE_KEY = "cart_items_v1";
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case "SET_ITEMS":
-      return { items: action.payload };
+      return { items: action.payload, lastAddedAt: state.lastAddedAt };
     case "ADD_ITEM": {
       const existing = state.items.find((item) => item.id === action.payload.id);
 
@@ -143,7 +143,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } }),
       clearCart: () => dispatch({ type: "CLEAR_CART" }),
     }),
-    [state.items, totalItems, totalPrice]
+    [state.items, state.lastAddedAt, totalItems, totalPrice]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

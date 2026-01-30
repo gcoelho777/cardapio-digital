@@ -1,4 +1,26 @@
-export const products = {
+export type ProductOption = {
+  preco: number;
+  peso_kg?: number;
+  volume_l?: number;
+};
+
+export type ProductItem = {
+  nome: string;
+  descricao?: string;
+  restricoes?: string[];
+  opcoes?: ProductOption[];
+  preco?: number;
+  aro?: number;
+  sabores?: string[];
+  observacoes?: string[];
+  imageUrl?: string;
+  pronta_entrega?: boolean;
+  antecedencia_horas?: number;
+  antecedencia_dias?: number;
+  peso_g?: number;
+};
+
+export const products: Record<string, ProductItem[]> = {
   sobremesas_zero_gluten: [
     {
       nome: "Torta Búlgara",
