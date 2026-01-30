@@ -22,10 +22,39 @@ export default function CheckoutPage() {
   );
   const [scheduledAt, setScheduledAt] = useState("");
   const [deliveryFeeInput, setDeliveryFeeInput] = useState("");
+  const [touched, setTouched] = useState({
+    customerName: false,
+    customerPhone: false,
+    customerAddress: false,
+  });
 
   const deliveryFee = deliveryFeeInput
     ? Number(deliveryFeeInput.replace(",", "."))
     : undefined;
+
+  const trimmedName = customerName.trim();
+  const trimmedPhone = customerPhone.trim();
+  const trimmedAddress = customerAddress.trim();
+
+  const phoneDigits = trimmedPhone.replace(/\D/g, "");
+  const phoneIsValid = phoneDigits.length >= 10;
+  const deliveryFeeIsValid =
+    deliveryFeeInput.trim() === "" ||
+    (Number.isFinite(deliveryFee) && deliveryFee >= 0);
+  const scheduledAtIsValid =
+    scheduledAt === "" || !Number.isNaN(Date.parse(scheduledAt));
+
+  const nameIsValid = trimmedName.length >= 2;
+  const addressIsValid =
+    deliveryType === "entrega" ? trimmedAddress.length >= 5 : true;
+
+  const formIsValid =
+    items.length > 0 &&
+    nameIsValid &&
+    phoneIsValid &&
+    addressIsValid &&
+    deliveryFeeIsValid &&
+    scheduledAtIsValid;
 
   const subtotal = totalPrice;
   const total =
@@ -33,11 +62,13 @@ export default function CheckoutPage() {
 
   const whatsappNumber =
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "93991306374";
-  const whatsappUrl = useMemo(
-    () =>
-      buildWhatsAppUrl({
-        phoneNumber: whatsappNumber,
-        orderDraft: {
+  const whatsappUrl = useMemo(() => {
+    if (!formIsValid) {
+      return "";
+    }
+    return buildWhatsAppUrl({
+      phoneNumber: whatsappNumber,
+      orderDraft: {
         id: "draft",
         items,
         subtotal,
@@ -50,22 +81,22 @@ export default function CheckoutPage() {
         deliveryType,
         scheduledAt: scheduledAt || undefined,
         createdAt: new Date().toISOString(),
-        },
-      }),
-    [
-      items,
-      customerName,
-      customerPhone,
-      customerAddress,
-      notes,
-      deliveryType,
-      scheduledAt,
-      subtotal,
-      deliveryFee,
-      total,
-      whatsappNumber,
-    ]
-  );
+      },
+    });
+  }, [
+    formIsValid,
+    whatsappNumber,
+    items,
+    customerName,
+    customerPhone,
+    customerAddress,
+    notes,
+    deliveryType,
+    scheduledAt,
+    subtotal,
+    deliveryFee,
+    total,
+  ]);
 
   if (items.length === 0) {
     return (
@@ -102,9 +133,21 @@ export default function CheckoutPage() {
             <input
               value={customerName}
               onChange={(event) => setCustomerName(event.target.value)}
-              className="h-11 rounded-xl border border-slate-200 px-4 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+              onBlur={() =>
+                setTouched((prev) => ({ ...prev, customerName: true }))
+              }
+              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+                touched.customerName && !nameIsValid
+                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                  : "border-slate-200 text-slate-700 focus:border-slate-400"
+              }`}
               placeholder="Seu nome completo"
             />
+            {touched.customerName && !nameIsValid ? (
+              <p className="text-xs text-rose-500">
+                Informe seu nome completo.
+              </p>
+            ) : null}
           </div>
 
           <div className="grid gap-2">
@@ -114,9 +157,21 @@ export default function CheckoutPage() {
             <input
               value={customerPhone}
               onChange={(event) => setCustomerPhone(event.target.value)}
-              className="h-11 rounded-xl border border-slate-200 px-4 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+              onBlur={() =>
+                setTouched((prev) => ({ ...prev, customerPhone: true }))
+              }
+              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+                touched.customerPhone && !phoneIsValid
+                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                  : "border-slate-200 text-slate-700 focus:border-slate-400"
+              }`}
               placeholder="(DDD) 90000-0000"
             />
+            {touched.customerPhone && !phoneIsValid ? (
+              <p className="text-xs text-rose-500">
+                Informe um WhatsApp válido.
+              </p>
+            ) : null}
           </div>
 
           <div className="grid gap-2">
@@ -154,13 +209,25 @@ export default function CheckoutPage() {
               <label className="text-sm font-semibold text-slate-700">
                 Endereço
               </label>
-              <input
-                value={customerAddress}
-                onChange={(event) => setCustomerAddress(event.target.value)}
-                className="h-11 rounded-xl border border-slate-200 px-4 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-                placeholder="Rua, número, bairro"
-              />
-            </div>
+            <input
+              value={customerAddress}
+              onChange={(event) => setCustomerAddress(event.target.value)}
+              onBlur={() =>
+                setTouched((prev) => ({ ...prev, customerAddress: true }))
+              }
+              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+                touched.customerAddress && !addressIsValid
+                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                  : "border-slate-200 text-slate-700 focus:border-slate-400"
+              }`}
+              placeholder="Rua, número, bairro"
+            />
+            {touched.customerAddress && !addressIsValid ? (
+              <p className="text-xs text-rose-500">
+                Informe o endereço completo.
+              </p>
+            ) : null}
+          </div>
           ) : null}
 
           <div className="grid gap-2">
@@ -171,8 +238,17 @@ export default function CheckoutPage() {
               type="datetime-local"
               value={scheduledAt}
               onChange={(event) => setScheduledAt(event.target.value)}
-              className="h-11 rounded-xl border border-slate-200 px-4 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+              className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
+                !scheduledAtIsValid
+                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                  : "border-slate-200 text-slate-700 focus:border-slate-400"
+              }`}
             />
+            {!scheduledAtIsValid ? (
+              <p className="text-xs text-rose-500">
+                Informe uma data válida.
+              </p>
+            ) : null}
           </div>
 
           <div className="grid gap-2">
@@ -231,9 +307,18 @@ export default function CheckoutPage() {
               inputMode="decimal"
               value={deliveryFeeInput}
               onChange={(event) => setDeliveryFeeInput(event.target.value)}
-              className="h-10 rounded-xl border border-slate-200 px-3 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+              className={`h-10 rounded-xl border px-3 text-sm focus:outline-none ${
+                !deliveryFeeIsValid
+                  ? "border-rose-300 text-rose-600 focus:border-rose-400"
+                  : "border-slate-200 text-slate-700 focus:border-slate-400"
+              }`}
               placeholder="0,00"
             />
+            {!deliveryFeeIsValid ? (
+              <p className="text-xs text-rose-500">
+                Informe um valor válido para entrega.
+              </p>
+            ) : null}
           </div>
           <div className="flex items-center justify-between text-base font-semibold text-slate-900">
             <span>Total</span>
@@ -244,10 +329,31 @@ export default function CheckoutPage() {
           href={whatsappUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
+          className={`mt-4 flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition ${
+            formIsValid
+              ? "bg-emerald-600 text-white hover:bg-emerald-500"
+              : "cursor-not-allowed bg-slate-200 text-slate-500"
+          }`}
+          aria-disabled={!formIsValid}
+          onClick={(event) => {
+            if (!formIsValid) {
+              event.preventDefault();
+              setTouched((prev) => ({
+                ...prev,
+                customerName: true,
+                customerPhone: true,
+                customerAddress: deliveryType === "entrega",
+              }));
+            }
+          }}
         >
           Enviar pedido no WhatsApp
         </a>
+        {!formIsValid ? (
+          <p className="mt-3 text-xs text-slate-500">
+            Preencha os dados obrigatórios para continuar.
+          </p>
+        ) : null}
       </aside>
     </div>
   );
