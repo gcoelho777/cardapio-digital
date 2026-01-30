@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import AddToCartButton from "../../components/add-to-cart-button";
 import { products } from "../../../data/products";
 
 const formatPrice = (value: number) =>
@@ -20,13 +21,21 @@ const getProductPrice = (item: {
   preco?: number;
   opcoes?: { preco: number }[];
 }) => {
+  const base = getProductBasePrice(item);
+  return base === null ? "Sob consulta" : formatPrice(base);
+};
+
+const getProductBasePrice = (item: {
+  preco?: number;
+  opcoes?: { preco: number }[];
+}) => {
   if (typeof item.preco === "number") {
-    return formatPrice(item.preco);
+    return item.preco;
   }
   if (item.opcoes && item.opcoes.length > 0) {
-    return formatPrice(item.opcoes[0].preco);
+    return item.opcoes[0].preco;
   }
-  return "Sob consulta";
+  return null;
 };
 
 const getSizeLabel = (option: { peso_kg?: number; volume_l?: number }) => {
@@ -57,6 +66,8 @@ export default function ProductPage({
   }
 
   const { categoria, item } = result;
+  const productId = slugify(`${categoria}-${item.nome}`);
+  const basePrice = getProductBasePrice(item);
 
   return (
     <div className="space-y-6">
@@ -145,12 +156,23 @@ export default function ProductPage({
               </ul>
             </div>
           )}
-          <button
-            type="button"
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-          >
-            Adicionar
-          </button>
+          {basePrice === null ? (
+            <button
+              type="button"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-400"
+              disabled
+            >
+              Sob consulta
+            </button>
+          ) : (
+            <AddToCartButton
+              productId={productId}
+              name={item.nome}
+              price={basePrice}
+              imageUrl="/images/placeholder.svg"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            />
+          )}
         </div>
       </section>
     </div>

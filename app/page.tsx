@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import AddToCartButton from "./components/add-to-cart-button";
 import { products } from "../data/products";
 
 const formatPrice = (value: number) =>
@@ -20,13 +21,21 @@ const getProductPrice = (item: {
   preco?: number;
   opcoes?: { preco: number }[];
 }) => {
+  const base = getProductBasePrice(item);
+  return base === null ? "Sob consulta" : formatPrice(base);
+};
+
+const getProductBasePrice = (item: {
+  preco?: number;
+  opcoes?: { preco: number }[];
+}) => {
   if (typeof item.preco === "number") {
-    return formatPrice(item.preco);
+    return item.preco;
   }
   if (item.opcoes && item.opcoes.length > 0) {
-    return formatPrice(item.opcoes[0].preco);
+    return item.opcoes[0].preco;
   }
-  return "Sob consulta";
+  return null;
 };
 
 export default function Home() {
@@ -48,7 +57,10 @@ export default function Home() {
             {category.replaceAll("_", " ")}
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
-            {items.map((item) => (
+            {items.map((item) => {
+              const productId = slugify(`${category}-${item.nome}`);
+              const basePrice = getProductBasePrice(item);
+              return (
               <article
                 key={item.nome}
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
@@ -66,7 +78,7 @@ export default function Home() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <Link
-                        href={`/produto/${slugify(`${category}-${item.nome}`)}`}
+                        href={`/produto/${productId}`}
                         className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
                       >
                         {item.nome}
@@ -81,15 +93,26 @@ export default function Home() {
                       {getProductPrice(item)}
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    className="w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-                  >
-                    Adicionar
-                  </button>
+                  {basePrice === null ? (
+                    <button
+                      type="button"
+                      className="w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-400"
+                      disabled
+                    >
+                      Sob consulta
+                    </button>
+                  ) : (
+                    <AddToCartButton
+                      productId={productId}
+                      name={item.nome}
+                      price={basePrice}
+                      imageUrl="/images/placeholder.svg"
+                    />
+                  )}
                 </div>
               </article>
-            ))}
+            );
+            })}
           </div>
         </section>
       ))}
