@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import ProductPurchase from "../../components/product-purchase";
@@ -91,6 +92,13 @@ export default function ProductPage({
 
   return (
     <div className="space-y-6">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:text-brand-dark"
+      >
+        <span aria-hidden="true">←</span>
+        Voltar ao catálogo
+      </Link>
       <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
         <div className="relative h-56 w-full bg-slate-100">
           <Image
