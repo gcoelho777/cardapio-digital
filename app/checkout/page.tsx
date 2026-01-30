@@ -44,7 +44,9 @@ export default function CheckoutPage() {
   const minLeadTimeMs = 2 * 60 * 60 * 1000;
   const minAllowedDate = new Date(now.getTime() + minLeadTimeMs);
   const withinBusinessHours = scheduledDate
-    ? scheduledDate.getHours() >= 8 && scheduledDate.getHours() <= 18
+    ? scheduledDate.getHours() >= 8 &&
+      (scheduledDate.getHours() < 18 ||
+        (scheduledDate.getHours() === 18 && scheduledDate.getMinutes() === 0))
     : false;
   const isNotPast = scheduledDate ? scheduledDate >= now : false;
   const hasMinimumLeadTime = scheduledDate
@@ -53,7 +55,9 @@ export default function CheckoutPage() {
   const isSunday = scheduledDate ? scheduledDate.getDay() === 0 : false;
   const isSaturday = scheduledDate ? scheduledDate.getDay() === 6 : false;
   const isSaturdayAfternoon = scheduledDate
-    ? isSaturday && scheduledDate.getHours() >= 12
+    ? isSaturday &&
+      (scheduledDate.getHours() > 12 ||
+        (scheduledDate.getHours() === 12 && scheduledDate.getMinutes() > 0))
     : false;
   const scheduleDayAllowed = !(isSunday || isSaturdayAfternoon);
   const schedulingRulesValid =
@@ -352,7 +356,7 @@ export default function CheckoutPage() {
           href={whatsappUrl}
           target="_blank"
           rel="noreferrer"
-          className={`mt-4 flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition ${
+          className={`mt-4 hidden w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition lg:flex ${
             formIsValid
               ? "bg-emerald-600 text-white hover:bg-emerald-500"
               : "cursor-not-allowed bg-slate-200 text-slate-500"
@@ -374,7 +378,7 @@ export default function CheckoutPage() {
           Enviar pedido no WhatsApp
         </a>
         {!formIsValid ? (
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 hidden text-xs text-slate-500 lg:block">
             Preencha os dados obrigatórios para continuar.
           </p>
         ) : null}

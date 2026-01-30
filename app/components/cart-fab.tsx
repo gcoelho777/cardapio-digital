@@ -26,7 +26,7 @@ export default function CartFab() {
   return (
     <Link
       href="/cart"
-      className={`fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-lg transition hover:bg-brand-dark ${
+      className={`fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-lg transition hover:bg-brand-dark lg:hidden ${
         animate ? "cart-bounce" : ""
       }`}
       aria-label="Abrir carrinho"

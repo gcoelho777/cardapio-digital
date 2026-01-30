@@ -138,7 +138,7 @@ export default function CartPage() {
         </div>
         <Link
           href="/checkout"
-          className="mt-4 flex w-full items-center justify-center rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
+          className="mt-4 hidden w-full items-center justify-center rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark lg:flex"
         >
           Finalizar pedido
         </Link>
