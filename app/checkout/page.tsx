@@ -3,74 +3,13 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "../providers/cart-provider";
+import { buildWhatsAppMessage } from "../utils/whatsapp";
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(value);
-
-const buildWhatsAppMessage = (params: {
-  items: ReturnType<typeof useCart>["items"];
-  customerName: string;
-  customerPhone: string;
-  customerAddress?: string;
-  notes?: string;
-  deliveryType: "retirada" | "entrega";
-  scheduledAt?: string;
-  subtotal: number;
-  deliveryFee?: number;
-  total: number;
-}) => {
-  const {
-    items,
-    customerName,
-    customerPhone,
-    customerAddress,
-    notes,
-    deliveryType,
-    scheduledAt,
-    subtotal,
-    deliveryFee,
-    total,
-  } = params;
-
-  const lines: string[] = [];
-  lines.push("Pedido - Cardápio Digital");
-  lines.push("");
-  lines.push(`Cliente: ${customerName}`);
-  lines.push(`WhatsApp: ${customerPhone}`);
-  lines.push(`Tipo: ${deliveryType === "entrega" ? "Entrega" : "Retirada"}`);
-  if (deliveryType === "entrega" && customerAddress) {
-    lines.push(`Endereço: ${customerAddress}`);
-  }
-  if (scheduledAt) {
-    lines.push(`Agendamento: ${scheduledAt}`);
-  }
-  if (notes) {
-    lines.push(`Observações: ${notes}`);
-  }
-  lines.push("");
-  lines.push("Itens:");
-  items.forEach((item) => {
-    const optionLabel = item.options?.length
-      ? ` (${item.options.map((opt) => opt.value).join(" • ")})`
-      : "";
-    lines.push(
-      `- ${item.quantity}x ${item.name}${optionLabel} — ${formatPrice(
-        item.price * item.quantity
-      )}`
-    );
-  });
-  lines.push("");
-  lines.push(`Subtotal: ${formatPrice(subtotal)}`);
-  if (typeof deliveryFee === "number") {
-    lines.push(`Entrega: ${formatPrice(deliveryFee)}`);
-  }
-  lines.push(`Total: ${formatPrice(total)}`);
-
-  return lines.join("\n");
-};
 
 export default function CheckoutPage() {
   const { items, totalPrice } = useCart();
@@ -96,16 +35,18 @@ export default function CheckoutPage() {
   const whatsappMessage = useMemo(
     () =>
       buildWhatsAppMessage({
+        id: "draft",
         items,
+        subtotal,
+        deliveryFee,
+        total,
         customerName,
         customerPhone,
         customerAddress: deliveryType === "entrega" ? customerAddress : undefined,
         notes,
         deliveryType,
         scheduledAt: scheduledAt || undefined,
-        subtotal,
-        deliveryFee,
-        total,
+        createdAt: new Date().toISOString(),
       }),
     [
       items,
