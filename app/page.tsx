@@ -21,6 +21,10 @@ const getProductPrice = (item: {
   preco?: number;
   opcoes?: { preco: number }[];
 }) => {
+  if (item.opcoes && item.opcoes.length > 0) {
+    const minPrice = Math.min(...item.opcoes.map((opcao) => opcao.preco));
+    return `A partir de ${formatPrice(minPrice)}`;
+  }
   const base = getProductBasePrice(item);
   return base === null ? "Sob consulta" : formatPrice(base);
 };
@@ -77,12 +81,19 @@ export default function Home() {
                 <div className="space-y-4 p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <Link
-                        href={`/produto/${productId}`}
-                        className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
-                      >
-                        {item.nome}
-                      </Link>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link
+                          href={`/produto/${productId}`}
+                          className="text-base font-semibold text-slate-900 underline-offset-4 hover:underline"
+                        >
+                          {item.nome}
+                        </Link>
+                        {item.opcoes && item.opcoes.length > 1 ? (
+                          <span className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                            {item.opcoes.length} tamanhos
+                          </span>
+                        ) : null}
+                      </div>
                       {item.descricao && (
                         <p className="mt-1 text-sm text-slate-600">
                           {item.descricao}
@@ -93,7 +104,14 @@ export default function Home() {
                       {getProductPrice(item)}
                     </span>
                   </div>
-                  {basePrice === null ? (
+                  {item.opcoes && item.opcoes.length > 0 ? (
+                    <Link
+                      href={`/produto/${productId}`}
+                      className="flex w-full items-center justify-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                    >
+                      Mostrar opções
+                    </Link>
+                  ) : basePrice === null ? (
                     <button
                       type="button"
                       className="w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-400"
