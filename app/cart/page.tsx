@@ -3,12 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../providers/cart-provider";
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
+import { formatPrice } from "../utils/format";
 
 export default function CartPage() {
   const { items, totalItems, totalPrice, updateQuantity, removeItem } =

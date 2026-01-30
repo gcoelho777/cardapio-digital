@@ -1,10 +1,5 @@
 import type { OrderDraft } from "../types/order-draft";
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
+import { formatPrice } from "./format";
 
 const formatSchedule = (value: string) => {
   const parsed = new Date(value);

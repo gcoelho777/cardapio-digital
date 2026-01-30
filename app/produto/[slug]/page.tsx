@@ -1,13 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import ProductPurchase from "../../components/product-purchase";
+import { formatPrice } from "../../utils/format";
 import { products } from "../../../data/products";
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
 
 const slugify = (value: string) =>
   value

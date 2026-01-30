@@ -3,13 +3,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useCart } from "../providers/cart-provider";
+import { formatPrice } from "../utils/format";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
 
 export default function CheckoutPage() {
   const { items, totalPrice } = useCart();

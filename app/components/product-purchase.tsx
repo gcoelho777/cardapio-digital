@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import AddToCartButton from "./add-to-cart-button";
+import { formatPrice } from "../utils/format";
 
 type ProductOption = {
   preco: number;
@@ -16,12 +17,6 @@ type ProductPurchaseProps = {
   basePrice: number | null;
   options?: ProductOption[];
 };
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
 
 const getSizeLabel = (option: ProductOption) => {
   if (typeof option.peso_kg === "number") {

@@ -2,12 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "./components/add-to-cart-button";
 import { products } from "../data/products";
-
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
+import { formatPrice } from "./utils/format";
 
 const slugify = (value: string) =>
   value
