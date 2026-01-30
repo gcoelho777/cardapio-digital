@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CartProvider } from "./providers/cart-provider";
 
 export const metadata: Metadata = {
   title: "Cardápio Digital",
@@ -29,7 +30,9 @@ export default function RootLayout({
             </Link>
           </div>
         </header>
-        <main>{children}</main>
+        <CartProvider>
+          <main>{children}</main>
+        </CartProvider>
       </body>
     </html>
   );
