@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import ProductPurchase from "../../components/product-purchase";
 import { formatPrice } from "../../utils/format";
 import { products } from "../../../data/products";
@@ -33,15 +34,43 @@ const getProductBasePrice = (item: {
   return null;
 };
 
+const getProductEntries = () =>
+  Object.entries(products).flatMap(([categoria, itens]) =>
+    itens.map((item) => ({ categoria, item }))
+  );
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const entries = getProductEntries();
+  const result = entries.find(
+    ({ categoria, item }) => slugify(`${categoria}-${item.nome}`) === params.slug
+  );
+
+  if (!result) {
+    return {
+      title: "Produto | Cardápio Digital",
+      description: "Detalhes do produto selecionado.",
+    };
+  }
+
+  const { item } = result;
+  return {
+    title: `${item.nome} | Cardápio Digital`,
+    description:
+      item.descricao ??
+      "Veja detalhes do produto e escolha a melhor opção para o seu pedido.",
+  };
+}
+
 export default function ProductPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const entries = Object.entries(products).flatMap(([categoria, itens]) =>
-    itens.map((item) => ({ categoria, item }))
-  );
-
+  const entries = getProductEntries();
   const result = entries.find(
     ({ categoria, item }) => slugify(`${categoria}-${item.nome}`) === params.slug
   );

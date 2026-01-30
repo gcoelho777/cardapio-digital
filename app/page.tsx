@@ -3,6 +3,13 @@ import Link from "next/link";
 import AddToCartButton from "./components/add-to-cart-button";
 import { products } from "../data/products";
 import { formatPrice } from "./utils/format";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Catálogo | Cardápio Digital",
+  description:
+    "Explore o catálogo de produtos e escolha suas opções favoritas para montar o pedido.",
+};
 
 const slugify = (value: string) =>
   value
