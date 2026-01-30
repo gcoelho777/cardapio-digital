@@ -26,6 +26,7 @@ export default function CheckoutPage() {
     customerName: false,
     customerPhone: false,
     customerAddress: false,
+    scheduledAt: false,
   });
 
   const deliveryFee = deliveryFeeInput
@@ -37,12 +38,35 @@ export default function CheckoutPage() {
   const trimmedAddress = customerAddress.trim();
 
   const phoneDigits = trimmedPhone.replace(/\D/g, "");
-  const phoneIsValid = phoneDigits.length >= 10;
+  const phoneIsValid = phoneDigits.length === 10 || phoneDigits.length === 11;
   const deliveryFeeIsValid =
     deliveryFeeInput.trim() === "" ||
     (Number.isFinite(deliveryFee) && deliveryFee >= 0);
   const scheduledAtIsValid =
-    scheduledAt === "" || !Number.isNaN(Date.parse(scheduledAt));
+    scheduledAt !== "" && !Number.isNaN(Date.parse(scheduledAt));
+  const scheduledDate = scheduledAtIsValid ? new Date(scheduledAt) : null;
+  const now = new Date();
+  const minLeadTimeMs = 2 * 60 * 60 * 1000;
+  const minAllowedDate = new Date(now.getTime() + minLeadTimeMs);
+  const withinBusinessHours = scheduledDate
+    ? scheduledDate.getHours() >= 8 && scheduledDate.getHours() <= 18
+    : false;
+  const isNotPast = scheduledDate ? scheduledDate >= now : false;
+  const hasMinimumLeadTime = scheduledDate
+    ? scheduledDate >= minAllowedDate
+    : false;
+  const isSunday = scheduledDate ? scheduledDate.getDay() === 0 : false;
+  const isSaturday = scheduledDate ? scheduledDate.getDay() === 6 : false;
+  const isSaturdayAfternoon = scheduledDate
+    ? isSaturday && scheduledDate.getHours() >= 12
+    : false;
+  const scheduleDayAllowed = !(isSunday || isSaturdayAfternoon);
+  const schedulingRulesValid =
+    scheduledAtIsValid &&
+    isNotPast &&
+    hasMinimumLeadTime &&
+    withinBusinessHours &&
+    scheduleDayAllowed;
 
   const nameIsValid = trimmedName.length >= 2;
   const addressIsValid =
@@ -54,7 +78,7 @@ export default function CheckoutPage() {
     phoneIsValid &&
     addressIsValid &&
     deliveryFeeIsValid &&
-    scheduledAtIsValid;
+    schedulingRulesValid;
 
   const subtotal = totalPrice;
   const total =
@@ -232,21 +256,25 @@ export default function CheckoutPage() {
 
           <div className="grid gap-2">
             <label className="text-sm font-semibold text-slate-700">
-              Agendamento (opcional)
+              Agendamento
             </label>
             <input
               type="datetime-local"
               value={scheduledAt}
               onChange={(event) => setScheduledAt(event.target.value)}
+              onBlur={() =>
+                setTouched((prev) => ({ ...prev, scheduledAt: true }))
+              }
               className={`h-11 rounded-xl border px-4 text-sm focus:outline-none ${
-                !scheduledAtIsValid
+                touched.scheduledAt && !scheduledAtIsValid
                   ? "border-rose-300 text-rose-600 focus:border-rose-400"
                   : "border-slate-200 text-slate-700 focus:border-slate-400"
               }`}
             />
-            {!scheduledAtIsValid ? (
+            {touched.scheduledAt && !schedulingRulesValid ? (
               <p className="text-xs text-rose-500">
-                Informe uma data válida.
+                Agende para um horário válido (08h–18h), com 2h de antecedência
+                e sem datas passadas. Não ocorre domingo e sábado após 12h.
               </p>
             ) : null}
           </div>
@@ -343,6 +371,7 @@ export default function CheckoutPage() {
                 customerName: true,
                 customerPhone: true,
                 customerAddress: deliveryType === "entrega",
+                scheduledAt: true,
               }));
             }
           }}
