@@ -58,6 +58,12 @@ export default function ProductPage({
   const { categoria, item } = result;
   const productId = slugify(`${categoria}-${item.nome}`);
   const basePrice = getProductBasePrice(item);
+  const readyDelivery =
+    "pronta_entrega" in item ? item.pronta_entrega : false;
+  const leadTimeHours =
+    "antecedencia_horas" in item ? item.antecedencia_horas : undefined;
+  const leadTimeDays =
+    "antecedencia_dias" in item ? item.antecedencia_dias : undefined;
 
   return (
     <div className="space-y-6">
@@ -126,6 +132,28 @@ export default function ProductPage({
               </ul>
             </div>
           )}
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-slate-700">
+              Disponibilidade
+            </p>
+            <div className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700">
+              {readyDelivery ? (
+                <span>Pronta-entrega.</span>
+              ) : leadTimeHours ? (
+                <span>
+                  Antecedência mínima: {leadTimeHours}{" "}
+                  {leadTimeHours === 1 ? "hora" : "horas"}.
+                </span>
+              ) : leadTimeDays ? (
+                <span>
+                  Antecedência mínima: {leadTimeDays}{" "}
+                  {leadTimeDays === 1 ? "dia" : "dias"}.
+                </span>
+              ) : (
+                <span>Sob consulta.</span>
+              )}
+            </div>
+          </div>
           <ProductPurchase
             productId={productId}
             name={item.nome}
