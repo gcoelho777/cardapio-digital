@@ -13,3 +13,23 @@ body {
 main {
   @apply mx-auto w-full max-w-5xl px-4 pb-12 pt-6;
 }
+
+.text-brand {
+  color: #4a6128;
+}
+
+.bg-brand {
+  background-color: #4a6128;
+}
+
+.bg-brand-dark {
+  background-color: #3d4f22;
+}
+
+.bg-brand-soft {
+  background-color: #f4f7ef;
+}
+
+.border-brand {
+  border-color: #4a6128;
+}

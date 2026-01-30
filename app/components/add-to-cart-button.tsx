@@ -36,7 +36,7 @@ export default function AddToCartButton({
       type="button"
       className={
         className ??
-        "w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+        "w-full rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
       }
       disabled={disabled}
       onClick={() =>

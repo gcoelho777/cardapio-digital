@@ -126,7 +126,7 @@ export default function CheckoutPage() {
         </p>
         <Link
           href="/"
-          className="mt-4 inline-flex rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          className="mt-4 inline-flex rounded-xl border border-brand px-4 py-2 text-sm font-semibold text-brand transition hover:bg-brand-soft"
         >
           Ver catálogo
         </Link>
@@ -202,8 +202,8 @@ export default function CheckoutPage() {
                 type="button"
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   deliveryType === "retirada"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-700 hover:border-slate-300"
+                    ? "border-brand bg-brand text-white"
+                    : "border-slate-200 text-slate-700 hover:border-brand hover:bg-brand-soft"
                 }`}
                 onClick={() => setDeliveryType("retirada")}
               >
@@ -213,8 +213,8 @@ export default function CheckoutPage() {
                 type="button"
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   deliveryType === "entrega"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-700 hover:border-slate-300"
+                    ? "border-brand bg-brand text-white"
+                    : "border-slate-200 text-slate-700 hover:border-brand hover:bg-brand-soft"
                 }`}
                 onClick={() => setDeliveryType("entrega")}
               >

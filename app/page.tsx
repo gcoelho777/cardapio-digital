@@ -50,8 +50,8 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-medium text-slate-500">Hello catalog</p>
+      <section className="rounded-2xl border border-slate-200 bg-brand-soft p-6 shadow-sm">
+        <p className="text-sm font-medium text-brand">Hello catalog</p>
         <h1 className="mt-2 text-2xl font-semibold text-slate-900">
           Catálogo simples para o MVP
         </h1>

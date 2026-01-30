@@ -118,7 +118,7 @@ export default function ProductPurchase({
           className={`w-full rounded-xl border px-4 py-3 text-sm font-semibold transition ${
             selectionRequired
               ? "border-slate-200 text-slate-400"
-              : "border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+              : "border-brand bg-brand text-white hover:bg-brand-dark"
           }`}
           disabled={selectionRequired}
         />
