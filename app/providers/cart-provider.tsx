@@ -44,14 +44,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case "SET_ITEMS":
       return { items: action.payload };
     case "ADD_ITEM": {
-      const existing = state.items.find(
-        (item) => item.productId === action.payload.productId
-      );
+      const existing = state.items.find((item) => item.id === action.payload.id);
 
       if (existing) {
         return {
           items: state.items.map((item) =>
-            item.productId === action.payload.productId
+            item.id === action.payload.id
               ? { ...item, quantity: item.quantity + action.payload.quantity }
               : item
           ),

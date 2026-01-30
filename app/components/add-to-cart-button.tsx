@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useCart } from "../providers/cart-provider";
 import type { CartItemOption } from "../types/cart-item";
 
@@ -12,6 +11,7 @@ type AddToCartButtonProps = {
   options?: CartItemOption[];
   notes?: string;
   className?: string;
+  disabled?: boolean;
 };
 
 export default function AddToCartButton({
@@ -22,10 +22,14 @@ export default function AddToCartButton({
   options,
   notes,
   className,
+  disabled = false,
 }: AddToCartButtonProps) {
   const { addItem } = useCart();
 
-  const itemId = useMemo(() => productId, [productId]);
+  const itemId =
+    options && options.length > 0
+      ? `${productId}-${JSON.stringify(options)}`
+      : productId;
 
   return (
     <button
@@ -34,6 +38,7 @@ export default function AddToCartButton({
         className ??
         "w-full rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
       }
+      disabled={disabled}
       onClick={() =>
         addItem({
           id: itemId,

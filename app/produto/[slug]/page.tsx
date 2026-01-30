@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import AddToCartButton from "../../components/add-to-cart-button";
+import ProductPurchase from "../../components/product-purchase";
 import { products } from "../../../data/products";
 
 const formatPrice = (value: number) =>
@@ -36,16 +36,6 @@ const getProductBasePrice = (item: {
     return item.opcoes[0].preco;
   }
   return null;
-};
-
-const getSizeLabel = (option: { peso_kg?: number; volume_l?: number }) => {
-  if (typeof option.peso_kg === "number") {
-    return `${option.peso_kg} kg`;
-  }
-  if (typeof option.volume_l === "number") {
-    return `${option.volume_l} L`;
-  }
-  return "Tamanho único";
 };
 
 export default function ProductPage({
@@ -109,26 +99,6 @@ export default function ProductPage({
               {getProductPrice(item)}
             </div>
           </div>
-          {item.opcoes && (
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-700">
-                Opções disponíveis
-              </p>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {item.opcoes.map((opcao) => (
-                  <div
-                    key={`${opcao.preco}-${opcao.peso_kg ?? opcao.volume_l}`}
-                    className="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700"
-                  >
-                    <span>{getSizeLabel(opcao)}</span>
-                    <span className="font-semibold text-slate-900">
-                      {formatPrice(opcao.preco)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
           {item.sabores && (
             <div className="space-y-2">
               <p className="text-sm font-semibold text-slate-700">Sabores</p>
@@ -156,23 +126,13 @@ export default function ProductPage({
               </ul>
             </div>
           )}
-          {basePrice === null ? (
-            <button
-              type="button"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-400"
-              disabled
-            >
-              Sob consulta
-            </button>
-          ) : (
-            <AddToCartButton
-              productId={productId}
-              name={item.nome}
-              price={basePrice}
-              imageUrl="/images/placeholder.svg"
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-            />
-          )}
+          <ProductPurchase
+            productId={productId}
+            name={item.nome}
+            imageUrl="/images/placeholder.svg"
+            basePrice={basePrice}
+            options={item.opcoes}
+          />
         </div>
       </section>
     </div>
