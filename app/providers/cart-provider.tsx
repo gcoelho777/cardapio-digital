@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   type ReactNode,
@@ -14,6 +15,7 @@ type CartState = {
 };
 
 type CartAction =
+  | { type: "SET_ITEMS"; payload: CartItem[] }
   | { type: "ADD_ITEM"; payload: CartItem }
   | { type: "REMOVE_ITEM"; payload: { id: string } }
   | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } }
@@ -35,8 +37,12 @@ const initialState: CartState = {
   items: [],
 };
 
+const STORAGE_KEY = "cart_items_v1";
+
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
+    case "SET_ITEMS":
+      return { items: action.payload };
     case "ADD_ITEM": {
       const existing = state.items.find(
         (item) => item.productId === action.payload.productId
@@ -86,6 +92,35 @@ const calculateTotals = (items: CartItem[]) => {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        return;
+      }
+      const parsed = JSON.parse(stored) as CartItem[];
+      if (Array.isArray(parsed)) {
+        dispatch({ type: "SET_ITEMS", payload: parsed });
+      }
+    } catch {
+      // Ignore malformed localStorage content.
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+    } catch {
+      // Ignore write errors (e.g. quota exceeded).
+    }
+  }, [state.items]);
 
   const { totalItems, totalPrice } = useMemo(
     () => calculateTotals(state.items),
